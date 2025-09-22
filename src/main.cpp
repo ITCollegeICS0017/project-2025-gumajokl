@@ -30,7 +30,7 @@ class Cashier{
 };
 
 int main() {
-    Cashier cashier("Gunther");
-    Transaction tx{100.0, Currency::USD, Currency::EUR};
-    cashier.exchange(tx);
+    Cashier cashier("Gunther"); // Create a Cashier object named "Gunther"
+    Transaction tx{100.0, Currency::USD, Currency::EUR}; // Create a Transaction object to exchange 100 USD to EUR
+    cashier.exchange(tx); // Call the exchange method of the Cashier object with the Transaction object
 }

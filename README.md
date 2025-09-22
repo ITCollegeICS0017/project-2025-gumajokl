@@ -34,25 +34,25 @@ docs/release-3/
 
 ## Workflow overview:
 
-Pull latest changes → Stay up to date with teammates.
+**Pull latest changes → Stay up to date with teammates.**
 - git checkout main
 - git pull origin main
 
-Create a branch → Work on a feature/bugfix without touching main.
+**Create a branch → Work on a feature/bugfix without touching main.**
 - git checkout -b feature/my-feature
 
-Commit changes → Save progress locally.
+**Commit changes → Save progress locally.**
 - git status                       # see changes
 - git add file1 file2              # stage specific files
 - git add .                        # stage everything
 - git commit -m "Add new feature"  # commit with a clear message
 
 
-Push branch to remote → Upload your work.
+**Push branch to remote → Upload your work.**
 - git push origin feature/my-feature
 
 
-Open a Pull Request (PR) → Request teammates to review/merge.
+**Open a Pull Request (PR) → Request teammates to review/merge.**
 1. Go to repo on GitHub. 
 2. You’ll see “Compare & pull request” after pushing a new branch.
 3. Fill in:
