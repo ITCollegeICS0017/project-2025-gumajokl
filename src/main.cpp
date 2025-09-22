@@ -68,6 +68,13 @@ class Reserve { // Implementation of Reserve class
         : totalUSD(usd), totalEUR(eur), totalGBP(gbp) {}
 };
 
+class Manager { // Implementation of Manager class
+    private:
+        string managerName;
+    public:
+        Manager(string name) : managerName(name) {} // Constructor to initialize manager name
+};
+
 int main() {
     Cashier cashier("Gunther"); // Create a Cashier object named "Gunther"
     Transaction tx{100.0, Currency::USD, Currency::EUR}; // Create a Transaction object to exchange 100 USD to EUR
