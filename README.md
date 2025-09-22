@@ -2,19 +2,21 @@
 # Title: An awesome currency exchange program
 ## Members/Git accounts
  - Günther Miklas / GuMiklas
- -  Klaus Jesper Zaletajev /
- - Joosep Rehepapp /
- - Mathias Siimon /
+ - Klaus Jesper Zaletajev /
+ - Joosep Rehepapp / papi-png
+ - Mathias Siimon / Matuffi
 
-## Description: This is our collective work of course ICS0017 project.
+## Description: 
+This is our collective work of course ICS0017 project.
 
 ## Build & Run
+- TBA
 
 ## Release workflow
 - We keep ONE repository for the whole project.
 - At the end of each checkpoint, mark a release tag and add your report.
 
-### Mark a release tag
+## Mark a release tag
 ###  end of Release 1:
 git tag release-1
 git push origin release-1
@@ -30,37 +32,34 @@ docs/release-2/
 
 docs/release-3/
 
-# Workflow overview:
+## Workflow overview:
 
 Pull latest changes → Stay up to date with teammates.
-    git checkout main
-    git pull origin main
+- git checkout main
+- git pull origin main
 
 Create a branch → Work on a feature/bugfix without touching main.
-    git checkout -b feature/my-feature
+- git checkout -b feature/my-feature
 
 Commit changes → Save progress locally.
-    git status                       # see changes
-    git add file1 file2              # stage specific files
-    git add .                        # stage everything
-    git commit -m "Add new feature"  # commit with a clear message
+- git status                       # see changes
+- git add file1 file2              # stage specific files
+- git add .                        # stage everything
+- git commit -m "Add new feature"  # commit with a clear message
 
 
 Push branch to remote → Upload your work.
-git push origin feature/my-feature
+- git push origin feature/my-feature
 
 
 Open a Pull Request (PR) → Request teammates to review/merge.
-    Go to repo on GitHub.
-    You’ll see “Compare & pull request” after pushing a new branch.
-    Fill in:
-        Title: short description
-        Body: what you changed, why, any notes
-
-    Submit the PR → teammates can:
-        Review code
-        Suggest changes
-        Approve & merge
-
-
-Merge into main → After approval.
+1. Go to repo on GitHub. 
+2. You’ll see “Compare & pull request” after pushing a new branch.
+3. Fill in:
+    - Title: short description
+    - Body: what you changed, why, any notes
+4. Submit the PR → teammates can:
+    - Review code
+    - Suggest changes
+    - Approve & merge
+5. Merge into main → After approval.
