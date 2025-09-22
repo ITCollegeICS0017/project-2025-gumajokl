@@ -15,7 +15,11 @@ This is our collective work of course ICS0017 project.
 
 ## Build & Run
 
-- TBA
+```python
+- Build: make
+- Run: make run
+- Test: make test
+```
 
 ## Release workflow
 
