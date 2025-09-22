@@ -2,7 +2,7 @@
 # Title: An awesome currency exchange program
 ## Members/Git accounts
  - Günther Miklas / GuMiklas
- - Klaus Jesper Zaletajev /
+ - Klaus Jesper Zaletajev / 
  - Joosep Rehepapp / papi-png
  - Mathias Siimon / Matuffi
 
