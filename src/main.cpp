@@ -3,7 +3,7 @@
 using namespace std;
 
 int main() {
-    Employee emp("Alice", 101);
+    Employee emp("Alice");
     cout << "Name: " << emp.getName() << endl;
     return 0;
 }

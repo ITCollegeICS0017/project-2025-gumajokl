@@ -5,13 +5,12 @@
 
 class Employee {
 public:
-    Employee(const std::string &name, int id);
+    explicit Employee(const std::string &name);
 
     std::string getName() const;
 
 private:
     std::string name_;
-    int id_;
 };
 
 #endif
