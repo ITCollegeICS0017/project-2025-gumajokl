@@ -1,5 +1,4 @@
-#ifndef TYPES_H
-#define TYPES_H
+#pragma once
 
 enum class Currency{
     USD,
@@ -12,5 +11,3 @@ struct Transaction{
     Currency from;
     Currency to;
 };
-
-#endif

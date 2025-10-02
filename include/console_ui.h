@@ -1,5 +1,3 @@
 #pragma once
 
-class ConsoleUI{
-
-};
+// To be implemented
