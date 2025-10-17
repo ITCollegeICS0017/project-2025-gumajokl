@@ -2,7 +2,6 @@
 #include "exchange_manager.h"
 #include "persistence.h"
 #include "utils.h"
-#include "web_gui.h"
 
 #include <exception>
 #include <iostream>
@@ -38,22 +37,14 @@ namespace {
 
 int main(int argc, char* argv[]) {
     try {
-        bool useConsole = false;
-        int guiPort = 8080;
         for (int index = 1; index < argc; ++index) {
             std::string argument = argv[index];
             if (argument == "--console") {
-                useConsole = true;
-            } else if (argument == "--gui") {
-                useConsole = false;
-            } else if ((argument == "--port" || argument == "-p") && index + 1 < argc) {
-                try {
-                    guiPort = std::stoi(argv[++index]);
-                } catch (...) {
-                    throw ExchangeError("Invalid port value provided");
-                }
+                continue; // Console mode is now the only supported interface.
+            } else if (argument == "--gui" || argument == "--port" || argument == "-p") {
+                throw ExchangeError("Web GUI support has been removed. Please use the terminal interface.");
             } else {
-                std::cout << "Unknown argument: " << argument << "\n";
+                throw ExchangeError("Unknown argument: " + argument);
             }
         }
 
@@ -87,13 +78,8 @@ int main(int argc, char* argv[]) {
         }
         office.initializeCriticalMinimums(criticalMinima);
 
-        if (useConsole) {
-            ConsoleUI ui(office, store);
-            ui.run();
-        } else {
-            WebGuiServer server(office, store, guiPort);
-            server.start();
-        }
+        ConsoleUI ui(office, store);
+        ui.run();
 
         store.saveReserve(office.reserve().allBalances());
         store.saveRates(office.rateConfig());
