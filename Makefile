@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX=g++
-CXXFLAGS=-Wall -Wextra -Werror -std=c++17
+CXXFLAGS=-Wall -Wextra -Werror -std=c++17 -Iinclude
 
 # Source and object files
 SRC=$(wildcard src/*.cpp)

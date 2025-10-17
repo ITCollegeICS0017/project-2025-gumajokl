@@ -1,88 +1,93 @@
-#include <stdio.h>
-#include <string>
+#include "console_ui.h"
+#include "exchange_manager.h"
+#include "persistence.h"
+#include "utils.h"
+
+#include <exception>
 #include <iostream>
-#include <ctime>
-using namespace std; // Using the standard namespace for simplicity
+#include <map>
+#include <string>
+#include <tuple>
 
-// Currency types that we allow
-enum class Currency { 
-    USD,
-    EUR,
-    GBP
-};
+namespace {
+    std::map<Currency, double> defaultReserveBalances() {
+        return {
+            {Currency::USD, 10'000.0},
+            {Currency::EUR, 8'000.0},
+            {Currency::GBP, 6'500.0},
+            {Currency::LOCAL, 12'000.0}
+        };
+    }
 
-// A struct for a currency exchange transaction
-struct Transaction { 
-    double amount;
-    Currency from;
-    Currency to;
-};
+    void ensureDefaultRates(RateTable& table) {
+        table.setRate(Currency::USD, Currency::LOCAL, 1.08);
+        table.setRate(Currency::EUR, Currency::LOCAL, 1.00);
+        table.setRate(Currency::GBP, Currency::LOCAL, 1.22);
+    }
 
-// Cashier class that has an encapsulated name and an exchange method
-class Cashier{ 
-    private:
-        // Constructor that initializes the name of the cashier when created
-        string name;
-    public:
-        Cashier(string n) : name(n){}
-            void exchange (const Transaction& tx) { // Method to perform currency exchange (Uses tx as input and calls cout)
-                cout << name << " exchanges " 
-                << tx.amount << " from " 
-                << (int)tx.from << " to " 
-                << (int)tx.to << endl;
+    std::map<Currency, double> defaultCriticalMinimums() {
+        return {
+            {Currency::USD, 1'000.0},
+            {Currency::EUR, 900.0},
+            {Currency::GBP, 800.0},
+            {Currency::LOCAL, 1'500.0}
+        };
+    }
+}
+
+int main(int argc, char* argv[]) {
+    try {
+        for (int index = 1; index < argc; ++index) {
+            std::string argument = argv[index];
+            if (argument == "--console") {
+                continue; // Console mode is now the only supported interface.
+            } else if (argument == "--gui" || argument == "--port" || argument == "-p") {
+                throw ExchangeError("Web GUI support has been removed. Please use the terminal interface.");
+            } else {
+                throw ExchangeError("Unknown argument: " + argument);
             }
-            void printReceipt(const Transaction& tx) { // Method to print a receipt of the transaction (Uses tx as input and calls cout)
-                cout << "Receipt: " << name << " exchanged " 
-                << tx.amount << " from " 
-                << (int)tx.from << " to " 
-                << (int)tx.to << endl;
+        }
+
+        DataStore store("data");
+        store.initialize();
+
+        RateTable rateTable(Currency::LOCAL);
+        auto storedRates = store.loadRates();
+        if (storedRates.empty()) {
+            ensureDefaultRates(rateTable);
+            store.saveRates(rateTable);
+        } else {
+            for (const auto& entry : storedRates) {
+                Currency from;
+                Currency to;
+                double rate;
+                std::tie(from, to, rate) = entry;
+                rateTable.setRate(from, to, rate);
             }
-};
+        }
 
-// Implementation of Client class
-class Client {
-    private:
-        string clientName;
-    public:
-        Client(string name) : clientName(name) {} // Constructor to initialize client name
+        std::map<Currency, double> reserveBalances = store.loadReserve(defaultReserveBalances());
+        Reserve reserve(reserveBalances);
 
-};
+        ExchangeOffice office(rateTable, reserve, 0.03);
 
-// Implementation of Receipt class
-class Receipt {
-    private:
-        int transactionID;
-    public:
-        Receipt(int number) : transactionID(number) {}
-        float exchangeRate; // Exchange rate for the transaction
-        float CurrencyFrom;
-        float CurrencyTo;
-        float amountExchanged;
-        Currency FromCurrency;
-        Currency ToCurrency;
-        time_t transactionTime; // Time of the transaction
-};
+        auto criticalMinima = store.loadCriticalMinimums();
+        if (criticalMinima.empty()) {
+            criticalMinima = defaultCriticalMinimums();
+            store.saveCriticalMinimums(criticalMinima);
+        }
+        office.initializeCriticalMinimums(criticalMinima);
 
-class Reserve { // Implementation of Reserve class
-    private: // Private members to hold total amounts of each currency
-        float totalUSD;
-        float totalEUR;
-        float totalGBP;
-    public: // Constructor to initialize the reserve amounts
-        Reserve(float usd, float eur, float gbp) 
-        : totalUSD(usd), totalEUR(eur), totalGBP(gbp) {}
-};
+        ConsoleUI ui(office, store);
+        ui.run();
 
-class Manager { // Implementation of Manager class
-    private:
-        string managerName;
-    public:
-        Manager(string name) : managerName(name) {} // Constructor to initialize manager name
-};
+        store.saveReserve(office.reserve().allBalances());
+        store.saveRates(office.rateConfig());
+        store.saveCriticalMinimums(office.criticalMinimumsMap());
+    } catch (const std::exception& error) {
+        std::cerr << "Fatal error: " << error.what() << '\n';
+        return 1;
+    }
 
-int main() {
-    Cashier cashier("Gunther"); // Create a Cashier object named "Gunther"
-    Transaction tx{100.0, Currency::USD, Currency::EUR}; // Create a Transaction object to exchange 100 USD to EUR
-    cashier.exchange(tx); // Call the exchange method of the Cashier object with the Transaction object
-    cashier.printReceipt(tx); // Call the printReceipt method of the Cashier object with the Transaction object
+    return 0;
 }
