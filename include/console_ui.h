@@ -1,40 +1,34 @@
 #pragma once
 
-#include "client.h"
-#include "employee.h"
-#include "persistence.h"
+#include "utils.h"
 
-#include <functional>
 #include <string>
-#include <vector>
+
 
 class ConsoleUI {
-private:
-    ExchangeOffice& office;
-    DataStore& store;
+    private:
+        DataStore& dataStore;    
 
-    std::string readLine(const std::string& prompt) const;
-    int readInt(const std::string& prompt, int minValue, int maxValue) const;
-    double readDouble(const std::string& prompt, double minValue) const;
-    Currency readCurrency(const std::string& prompt) const;
-    bool readYesNo(const std::string& prompt) const;
-    std::vector<int> readDenominations(const std::string& prompt) const;
+        std::string readLine(std::string prompt) const;
+        int readInt(const std::string& prompt, int minValue, int maxValue) const;
+        double readDouble(const std::string& prompt, double minValue) const;
+        Currency readCurrency(const std::string& prompt) const;
+        bool readYesNo(const std::string& prompt) const;
 
-    void employeeSession();
-    void employeeExchangeFlow(Cashier& cashier);
-    void employeeReserveCheck() const;
+        void mainMenu();
 
-    void managerSession();
-    void managerShowReport(Manager& manager);
-    void managerAdjustRates(Manager& manager);
-    void managerSetCriticalReserve(Manager& manager);
+        void cashierMenu();
+        void cashierExchange(Cashier &cashier);
 
-    void persistReserve() const;
-    void persistRates() const;
-    void persistCriticalMinimums() const;
+        void ReserveCheck() const;
 
-public:
-    ConsoleUI(ExchangeOffice& office, DataStore& persistence);
+        void managerSession();
+        void managerShowReport();
+        void managerAdjustRates();
+        void managerSetCriticalReserve();
 
-    void run();
+
+    public:
+        ConsoleUI(DataStore& dataStore_in);
+        void start();
 };

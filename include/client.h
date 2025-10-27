@@ -1,20 +1,15 @@
 #pragma once
 
-#include "utils.h"
-
 #include <string>
-#include <vector>
 
-class Client {
-private:
-    int clientId;
-    std::string clientName;
+class Client{
+    private:
+        int _clientID;
+        std::string _clientName;
 
-public:
-    Client(int id, std::string name);
+    public:
+        Client(int clientID, std::string clientName);
 
-    int id() const;
-    const std::string& name() const;
-    ExchangeRequest createSimpleRequest(Currency sourceCurrency, double amount, Currency targetCurrency) const;
-    ExchangeRequest createCustomRequest(Currency sourceCurrency, double amount, std::vector<ExchangePortion> portions) const;
+        int get_id() const;
+        const std::string& get_name() const;
 };

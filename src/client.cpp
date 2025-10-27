@@ -1,26 +1,7 @@
+
 #include "client.h"
 
-#include <utility>
+Client::Client(int clientID, std::string clientName) : _clientID(clientID), _clientName(clientName) {}
 
-Client::Client(int id, std::string name)
-    : clientId(id),
-      clientName(std::move(name)) {}
-
-int Client::id() const {
-    return clientId;
-}
-
-const std::string& Client::name() const {
-    return clientName;
-}
-
-ExchangeRequest Client::createSimpleRequest(Currency sourceCurrency, double amount, Currency targetCurrency) const {
-    std::vector<ExchangePortion> portions;
-    auto portion = ExchangePortion::remainder(targetCurrency);
-    portions.push_back(portion);
-    return ExchangeRequest(clientId, clientName, sourceCurrency, amount, portions);
-}
-
-ExchangeRequest Client::createCustomRequest(Currency sourceCurrency, double amount, std::vector<ExchangePortion> portions) const {
-    return ExchangeRequest(clientId, clientName, sourceCurrency, amount, std::move(portions));
-}
+int Client::get_id() const { return _clientID; }
+const std::string& Client::get_name() const { return _clientName; }
