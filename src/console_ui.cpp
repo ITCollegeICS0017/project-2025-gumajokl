@@ -1,7 +1,8 @@
 #include "console_ui.h"
 
-#include "employee.h"
 #include "data_storage.h"
+#include "employee.h"
+#include "client.h"
 
 #include <iostream>
 
@@ -100,7 +101,7 @@ void ConsoleUI::mainMenu() {
                 break;
             case 2:
                 try {
-                    managerMenu();
+                    // managerMenu();
                 } catch (const std::exception& error) {
                     std::cout << "Manager session ended: " << error.what() << '\n';
                 }
@@ -141,9 +142,16 @@ void ConsoleUI::cashierMenu() {
     }
 }
 
-void ConsoleUI::cashierExchange(Cashier& cashier){
+void ConsoleUI::cashierExchange(Cashier &cashier){
+    // Get specific client
+    // If does not exist, create new client
     std::string clientName = readLine("Enter client name: ");
     int clientId = dataStore.getPersonId("client", clientName);
+    Client client(clientId, clientName);
 
+    // Set exchange details
+    Currency fromCurrency = readCurrency("Enter currency to exchange from (USD, EUR, GBP, LOCAL): ");
+    double amount = readDouble("Enter amount to exchange: ", 0.01);
+    Currency toCurrency = readCurrency("Enter currency to exchange to (USD, EUR, GBP, LOCAL): ");
 
 }
