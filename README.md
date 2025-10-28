@@ -4,9 +4,9 @@
 
 ## Members/Git accounts
 
-- Günther Miklas / gumikl
-- Klaus Jesper Zaletajev /
-- Joosep Rehepapp / papi-png
+- Günther Miklas / GuMiklas
+- Klaus Jesper Zaletajev / doge cream
+- Joosep Rehepapp / elden_smoke
 - Mathias Siimon / Matuffi
 
 ## Description:
@@ -42,7 +42,7 @@ git push origin release-2
 
 docs/release-1/  # slides, SRS/SDP updates, test report
 
-docs/release-2/
+docs/release-2/ # DLD docs, UML diagram
 
 docs/release-3/
 
