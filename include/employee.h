@@ -1,15 +1,21 @@
 #pragma once
 
+#include "utils.h"
+#include "exchange_manager.h"
+
 #include <string>
+
 
 class Employee {
     protected:
         int id;
         std::string name;
+        PersonRole role;
 
+        ExchangeOffice exchangeOffice;
 
     public:
-        Employee(int employeeId, std::string employeeName);
+        Employee(int employeeId, std::string employeeName, ExchangeOffice& exchangeOffice_in);
 
         int get_id() const { return id; }
         const std::string& get_name() const { return name; }
@@ -17,15 +23,13 @@ class Employee {
 
 
 class Cashier : public Employee {
-    private:
-
     public:
         Cashier(int cashierId, std::string cashierName);
+
+        Receipt perform_exchange(const ExchangeRequest& request);
 };
 
 class Manager : public Employee {
-    private:
-
     public:
         Manager(int managerId, std::string managerName);
 };

@@ -1,14 +1,15 @@
 #include "console_ui.h"
 
-#include "data_storage.h"
-#include "employee.h"
 #include "client.h"
 
 #include <iostream>
 
 
-ConsoleUI::ConsoleUI(DataStore& dataStore_in)
-    : dataStore(dataStore_in) {}
+// ### Constructor
+
+ConsoleUI::ConsoleUI(DataStore& dataStore_in, ExchangeOffice& exchangeOffice_in)
+    : dataStore(dataStore_in), exchangeOffice(exchangeOffice_in) {}
+
 
 // ### Util functions
 
@@ -78,8 +79,20 @@ bool ConsoleUI::readYesNo(const std::string& prompt) const {
     }
 }
 
+void ConsoleUI::printReceipt(const Receipt& receipt){
+    std::cout << "\n--- Exchange Receipt ---\n";
+    std::cout << "Client: " << receipt.client_name << " (ID: " << receipt.client_id << ")\n";
+    std::cout << "Cashier: " << receipt.cashier_name << " (ID: " << receipt.cashier_id << ")\n";
+    std::cout << "From: " << string_from_currency(receipt.from_currency) << "\n";
+    std::cout << "To: " << string_from_currency(receipt.to_currency) << "\n";
+    std::cout << "Amount exchanged: " << receipt.amount_exchanged << "\n";
+    std::cout << "Exchange rate: " << receipt.exchange_rate << "\n";
+    std::cout << "Amount received: " << receipt.amount_received << "\n";
+    std::cout << "------------------------\n\n";
+}
 
-// ### Different screens
+
+// ### Different menus
 
 void ConsoleUI::mainMenu() {
     bool running = true;
@@ -116,8 +129,9 @@ void ConsoleUI::mainMenu() {
 }
 
 void ConsoleUI::cashierMenu() {
+    // Cashier login
     std::string cashierName = readLine("Enter cashier name: ");
-    int cashierId = dataStore.getPersonId("cashier", cashierName);
+    int cashierId = dataStore.getPersonId(PersonRole::CASHIER, cashierName);
     Cashier cashier(cashierId, cashierName);
 
     bool active = true;
@@ -130,10 +144,10 @@ void ConsoleUI::cashierMenu() {
 
         switch (choice) {
             case 1:
-                cashierExchange(cashier);
+                cashierPerformExchange(cashier);
                 break;
             case 2:
-                ReserveCheck();
+                employeeReserveCheck();
                 break;
             case 3:
                 active = false;
@@ -142,16 +156,30 @@ void ConsoleUI::cashierMenu() {
     }
 }
 
-void ConsoleUI::cashierExchange(Cashier &cashier){
+void ConsoleUI::cashierPerformExchange(Cashier &cashier){
     // Get specific client
     // If does not exist, create new client
     std::string clientName = readLine("Enter client name: ");
-    int clientId = dataStore.getPersonId("client", clientName);
+    int clientId = dataStore.getPersonId(PersonRole::CLIENT, clientName);
     Client client(clientId, clientName);
 
     // Set exchange details
     Currency fromCurrency = readCurrency("Enter currency to exchange from (USD, EUR, GBP, LOCAL): ");
     double amount = readDouble("Enter amount to exchange: ", 0.01);
+
     Currency toCurrency = readCurrency("Enter currency to exchange to (USD, EUR, GBP, LOCAL): ");
+
+    // Create exchange request
+    ExchangeRequest request{
+        .client_id = client.get_id(),
+        .client_name = client.get_name(),
+        .from_currency = fromCurrency,
+        .amount = amount
+    };
+
+    // Process exchange
+
+
+
 
 }

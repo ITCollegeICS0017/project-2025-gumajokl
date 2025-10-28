@@ -14,12 +14,13 @@ struct Person {
 
 class DataStore{
     private:
-        std::map<std::tuple<std::string, std::string>, Person> peopleDB;
+        std::map<std::tuple<PersonRole, std::string>, Person> peopleDB;
         int nextPersonId = 1;
 
-        int addPerson(const std::string& roleStr, const std::string& name);
+        int addPerson(PersonRole role, const std::string& name);
 
     public:
-        int getPersonId(const std::string& roleStr, const std::string& name);
+        DataStore();
+        int getPersonId(PersonRole role, const std::string& name);
 
 };
