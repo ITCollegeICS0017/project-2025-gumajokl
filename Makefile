@@ -1,21 +1,35 @@
-CC=gcc
-CFLAGS=-Wall -Wextra -Werror -std=c11
-SRC=$(wildcard src/*.c)
-OBJ=$(SRC:.c=.o)
-BIN=app
+# Compiler and flags
+CXX=g++
+CXXFLAGS=-Wall -Wextra -Werror -std=c++17 -Iinclude
 
-.PHONY: all run test clean
+# Source and object files
+SRC=$(wildcard src/*.cpp)
+OBJ=$(SRC:.cpp=.o)
 
-all: $(BIN)
+# Executable name
+BIN=main
 
-$(BIN): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
+# Detect OS to add .exe for Windows
+ifeq ($(OS),Windows_NT)
+    BIN_EXE=$(BIN).exe
+else
+    BIN_EXE=$(BIN)
+endif
 
-run: $(BIN)
-	./$(BIN)
+# Phony targets
+.PHONY: all run clean
 
-test: $(BIN) tests/test_basic.sh
-	bash tests/test_basic.sh
+# Default target
+all: $(BIN_EXE)
 
+# Compile object files and link
+$(BIN_EXE): $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+# Run the executable
+run: $(BIN_EXE)
+	./$(BIN_EXE)
+
+# Clean build
 clean:
-	rm -f $(BIN) src/*.o
+	rm -f $(BIN_EXE) src/*.o
