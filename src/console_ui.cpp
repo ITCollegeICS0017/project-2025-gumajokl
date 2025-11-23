@@ -346,12 +346,20 @@ void ConsoleUI::managerShowReport(Manager& manager) {
 }
 
 void ConsoleUI::managerAdjustRates(Manager& manager) {
-    Currency from = readCurrency("From currency: ");
-    Currency to = readCurrency("To currency: ");
-    double rate = readDouble("New rate (target per unit from-currency): ", 0.0001);
-    manager.setExchangeRate(from, to, rate);
-    persistRates();
-    std::cout << "Exchange rate updated for " << to_string(from) << " -> " << to_string(to) << ".\n";
+    try {
+        Currency from = readCurrency("From currency: ");
+        Currency to = readCurrency("To currency: ");
+        if (from == to) {
+            throw ExchangeError("From and to currencies must be different");
+        }
+        double rate = readDouble("New rate (target per unit from-currency): ", 0.0001);
+
+        manager.setExchangeRate(from, to, rate);
+        persistRates();
+        std::cout << "Exchange rate updated for " << to_string(from) << " -> " << to_string(to) << ".\n";
+    } catch (const std::exception& error) {
+        std::cout << "Rate update failed: " << error.what() << '\n';
+    }
 }
 
 void ConsoleUI::managerSetCriticalReserve(Manager& manager) {
